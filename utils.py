@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.metrics import classification_report
 
 def result_anova(colonneQualitative, dataframe, seuil = 0.05):
   from statsmodels.formula.api import ols
@@ -43,3 +44,8 @@ def clean_columns(df):
   df.columns = [col.replace('-', '_') for col in df.columns]
   return df
 
+def get_rapport_clf(list_grid, X_train, X_test, y_train, y_test):
+  for clf in list_grid:
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    print(classification_report(y_test, y_pred))
