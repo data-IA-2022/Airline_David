@@ -36,3 +36,10 @@ def get_fill_ratio(pourcentage, df):
   for i in range(len(df)):
     print(f"{df.index[i]} : {df.values[i][0].round(2)}")
   return df.index
+
+def clean_columns(df):
+  df.columns = [col.replace(' ', '_') for col in df.columns]
+  df.columns = [col.replace('/', '_') for col in df.columns]
+  df.columns = [col.replace('-', '_') for col in df.columns]
+  return df
+
