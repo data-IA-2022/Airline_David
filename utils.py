@@ -1,5 +1,7 @@
 import pandas as pd
 from sklearn.metrics import classification_report
+import matplotlib.pyplot as plt
+import scikitplot as skplt
 
 def result_anova(colonneQualitative, dataframe, seuil = 0.05):
   from statsmodels.formula.api import ols
@@ -10,7 +12,6 @@ def result_anova(colonneQualitative, dataframe, seuil = 0.05):
   listeColonnesQuantitatives = dataframe.select_dtypes(exclude=[object]).columns
   resultatAnova = []
   for colonne in listeColonnesQuantitatives:
-    print(colonne)
     entrainement = ols(f"{colonne} ~ {colonneQualitative}", data=dataframe).fit()        
     st_p = anova_lm(entrainement).loc[colonneQualitative, "PR(>F)"]
     if st_p > seuil:
@@ -49,3 +50,5 @@ def get_rapport_clf(list_grid, X_train, X_test, y_train, y_test):
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
     print(classification_report(y_test, y_pred))
+    skplt.metrics.plot_confusion_matrix(y_test, y_pred, normalize=True)
+    plt.show()
