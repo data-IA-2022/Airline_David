@@ -61,7 +61,7 @@ def get_rapport_clf(list_grid, X_train, X_test, y_train, y_test):
     print(label)
     print(f"time of fit : {np.round(end_time-start_time, 2)} seconds\n")
     print(f"Best Parameters : {clf.best_params_}")
-    print(classification_report(y_test, y_pred))
+    print(classification_report(y_test, y_pred, digits=4))
     skplt.metrics.plot_confusion_matrix(y_test, y_pred, normalize=True,title=label)
     plt.show()
 
