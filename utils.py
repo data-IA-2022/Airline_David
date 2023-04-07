@@ -2,6 +2,11 @@ import pandas as pd
 from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
 import scikitplot as skplt
+import time
+import numpy as np 
+import keras
+from matplotlib import pyplot as plt
+from IPython.display import clear_output
 
 def result_anova(colonneQualitative, dataframe, seuil = 0.05):
   from statsmodels.formula.api import ols
@@ -45,18 +50,21 @@ def clean_columns(df):
   df.columns = [col.replace('-', '_') for col in df.columns]
   return df
 
+
 def get_rapport_clf(list_grid, X_train, X_test, y_train, y_test):
-  for clf in list_grid:
+  labels = ['KNN', 'Gradient Boosting', 'Random Forest', 'Extreme Boosting']
+  for clf, label in zip(list_grid, labels):
+    start_time = time.time()
     clf.fit(X_train, y_train)
+    end_time = time.time()
     y_pred = clf.predict(X_test)
+    print(label)
+    print(f"time of fit : {np.round(end_time-start_time, 2)} seconds\n")
+    print(f"Best Parameters : {clf.best_params_}")
     print(classification_report(y_test, y_pred))
-    skplt.metrics.plot_confusion_matrix(y_test, y_pred, normalize=True)
+    skplt.metrics.plot_confusion_matrix(y_test, y_pred, normalize=True,title=label)
     plt.show()
 
-import numpy as np 
-import keras
-from matplotlib import pyplot as plt
-from IPython.display import clear_output
 
 class PlotLearning(keras.callbacks.Callback):
     """
